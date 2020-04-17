@@ -1,0 +1,126 @@
+* {
+    border : none;
+    margin : none;
+    padding : none;
+    text-decoration: none;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.sprite { 
+    background: url('/static/images/poker_cards.jpg') no-repeat top left;
+    width: 57px;
+    height: 79px;
+} 
+
+.sprite.as_heart { background-position: 0 0;}
+.sprite.two_heart { background-position: -57px 0; }
+.sprite.three_heart { background-position: -114px 0;}
+.sprite.four_heart { background-position: -171px 0;}
+.sprite.five_heart { background-position: -228px 0;}
+.sprite.six_heart { background-position: -285px 0;}
+.sprite.seven_heart { background-position: -342px 0;}
+.sprite.height_heart { background-position: -399px 0;}
+.sprite.nine_heart { background-position: -456px 0;}
+.sprite.ten_heart { background-position: -513px 0;}
+.sprite.jack_heart { background-position: -570px 0;}
+.sprite.queen_heart { background-position: -627px 0;}
+.sprite.king_heart { background-position: -684px 0;}
+
+.sprite.as_spide { background-position: 0 -79px;}
+.sprite.two_spide { background-position: -57px -79px }
+.sprite.three_spide { background-position: -114px -79px;}
+.sprite.four_spide { background-position: -171px -79px;}
+.sprite.five_spide { background-position: -228px -79px;}
+.sprite.six_spide { background-position: -285px -79px;}
+.sprite.seven_spide { background-position: -342px -79px;}
+.sprite.height_spide { background-position: -399px -79px;}
+.sprite.nine_spide { background-position: -456px -79px;}
+.sprite.ten_spide { background-position: -513px -79px;}
+.sprite.jack_spide { background-position: -570px -79px;}
+.sprite.queen_spide { background-position: -627px -79px;}
+.sprite.king_spide { background-position: -684px -79px;}
+
+.sprite.as_diamond { background-position: 0 -158px;}
+.sprite.two_diamond { background-position: -57px -158px }
+.sprite.three_diamond { background-position: -114px -158px;}
+.sprite.four_diamond { background-position: -171px -158px;}
+.sprite.five_diamond { background-position: -228px -158px;}
+.sprite.six_diamond { background-position: -285px -158px;}
+.sprite.seven_diamond { background-position: -342px -158px;}
+.sprite.height_diamond { background-position: -399px -158px;}
+.sprite.nine_diamond { background-position: -456px -158px;}
+.sprite.ten_diamond { background-position: -513px -158px;}
+.sprite.jack_diamond { background-position: -570px -158px;}
+.sprite.queen_diamond { background-position: -627px -158px;}
+.sprite.king_spide { background-position: -684px -158px;}
+
+.sprite.as_club { background-position: 0 -237px;}
+.sprite.two_club { background-position: -57px -237px; }
+.sprite.three_club { background-position: -114px -237px;}
+.sprite.four_club { background-position: -171px -237px;}
+.sprite.five_club { background-position: -228px -237px;}
+.sprite.six_club { background-position: -285px -237px;}
+.sprite.seven_club { background-position: -342px -237px;}
+.sprite.height_club { background-position: -399px -237px;}
+.sprite.nine_club { background-position: -456px -237px;}
+.sprite.ten_club { background-position: -513px -237px;}
+.sprite.jack_club { background-position: -570px -237px;}
+.sprite.queen_club { background-position: -627px -237px;}
+.sprite.king_spide { background-position: -684px -237px;}
+
+
+#container{
+    display: grid;
+    grid-template-rows: repeat(4, 25%);
+    grid-template-columns: repeat(4, 25%);
+}
+
+
+body {
+    /* background-color : 	#66ffc2; */
+}
+
+header{
+    border: 2px solid yellowgreen;
+    grid-row : 1;
+    grid-column: 1 / 5;
+    
+}
+
+#menu{
+    border : 2px solid black;
+    border-radius: 5px;
+}
+
+#playingArea{
+    border : 2px solid green;
+    border-radius: 5px;
+    grid-row : 2 / 5;
+    grid-column: 1 / 4;
+}
+
+
+.player {
+    border : 1px solid red;
+    border-radius: 10px;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+
+#scoreBoard{
+    border : 2px solid indigo;
+    border-radius: 5px;
+    grid-row : 2 / 5;
+    grid-column: 4 / 5;
+}
+
+#actions{
+    border : 2px solid blue;
+    border-radius: 5px;
+    grid-row : 5 / 5;
+    grid-column: 1 / 5;
+}

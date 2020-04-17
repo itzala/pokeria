@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PokerIA</title>
+        <meta charset="utf-8">
+        <script src='/socket.io/socket.io.js'></script>
+        <script src='/static/js/jquery.min.js'></script>
+        <script src='/static/js/app.js'></script>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/cards/cards.css">
+    </head>
+    <body>
+        <div id="container">
+            <header>
+                <h1 id="mainTitle">PokerIA - Texas Hold'em No Limit</h1>
+                <nav>
+                    <ul id="menu">
+                        <li>Configuration</li>
+                        <li><a href="https://fr.pokerlistings.com/regles-holdem">Règles du poker</a></li>
+                        <li>Informations</li>
+                    </ul>
+                </nav>
+            </header>
+
+            <section class="mainAera">
+                <div class="gameAera">
+                    <div class="playersAreaTop">
+                    </div>
+                    <div class="tableArea">
+                        <div id="tableCards">
+                            <div class="playingCards faceImages">
+                                <ul class="table" id="tableCardsList">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <aside class="playersAreaSide playersAreaLeft">
+                    </aside>
+                    <aside class="playersAreaSide playersAreaRight">
+                    </aside>
+                    <div class="playersAreaBottom">
+                        
+                        <div id="croupier">
+                            <h4>Croupier</h4>
+                            <div class="playingCards">
+                                <ul class="deck" id="croupier-deck">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="asideActions">
+                    <div id="stepGame">
+                        <p> Joueurs au maximum : <span id="nbMaxPlayers">0</span></p>
+                        <p> Joueurs connectés : <span class="nbConnectedPlayers">0</span></p>
+                        <p> Joueurs prêts : <span id="nbReadyPlayers">0</span> / <span class="nbConnectedPlayers">0</span></p>
+                        <p> Etape du jeu : <span id="step"> IHM Connectée</span></p>
+                    </div>
+                    <div id="legende">
+                        <div class="legende-item">
+                            <p>Dealer :</p>
+                            <div class="position position-dealer">D</div>
+                        </div>
+                        <div class="legende-item">
+                            <p>Simple joueur :</p>
+                            <div class="position position-player"> SP</div>
+                        </div>
+                        <div class="legende-item">
+                            <p>Petite Blinde :</p>
+                            <div class="position position-little-blind">LB</div>
+                        </div>
+                        <div class="legende-item">
+                            <p>Grosse blinde :</p>
+                            <div class="position position-big-blind">BB</div>
+                        </div>
+                        
+                        <!-- <ul>
+                            <li>Carte haute</li>
+                            <li>Paire</li>
+                            <li>Double paire</li>
+                            <li>Carte haute</li>
+                            <li>Carte haute</li>
+                            <li>Carte haute</li>
+                            <li>Carte haute</li>
+                            <li>Carte haute</li>
+                            <li>Carte haute</li>
+                        </ul> -->
+                    </div>
+                    <div id="actions">
+                        <h3>Actions</h3>
+                            <ul id="actionsButton">
+                                <!-- <li><button type='button' class="btn primary" id="initIHMButton">Initialiser IHM</button></li> -->
+                                <li><button type='button' class="btn primary" id="getReadyButton">Prêts ? </button></li>
+                                <li><button type='button' class="btn primary" id="startGameButton" hidden>Lancer la partie</button></li>
+                                <li><button type='button' class="btn primary" id="startNewGameButton" hidden>Lancer une nouvelle partie</button></li>
+                                <li><button type='button' class="btn warning" id="reinitializeGameButton">Réinitialiser</button></li>
+                            </ul>
+                    </div>
+                    <div id="scoreboardSection">
+                        <h3>Scoreboard</h3>
+                        <div class="scoringRank header">
+                            <p class="positionRank">Rank</p>
+                            <p class="playerNameRank">Name</p>
+                            <p class="tokensRank">Tokens</p>
+                        </div>
+                        <ul id="classement">
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section id="historique">
+                <h3>Historique des actions de la partie</h3>
+                <ul id="historiqueListe"></ul>
+            </section>
+        </div>
+    </body>
+</html> 

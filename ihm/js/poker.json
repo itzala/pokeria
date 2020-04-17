@@ -1,0 +1,5 @@
+{
+    "colors" : ["HEART", "DIAMOND", "CLUB", "SPADE"],
+    "cardsByColor" : ["TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN", "JACK", "QUEEN", "KING", "AS"],
+    "stepGame" : ["PREFLOP", "FLOP", "TURN", "RIVER"]
+}

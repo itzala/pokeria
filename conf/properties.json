@@ -1,0 +1,23 @@
+{
+    "server" : {
+        "host" : "http://localhost",
+        "port" : 9080,
+        "namespacePlayer" : "api-player",
+        "namespaceSpectator" : "ihm",
+        "ihm" : {
+            "viewsDir" : "ihm",
+            "stylesDir" : "css",
+            "scriptsDir" : "js"
+        }
+    },
+    "nbMinPlayer" : 4,
+    "nbMaxPlayer" : 5,
+    "countTokensStart" : 1500,
+    "log" : {
+        "logDir" : "logs",
+        "verbosity" : "debug",
+        "file_croupier" : "app_croupier.log",
+        "file_player" : "app_player_NUM_PLAYER.log",
+        "debug" : true
+    }
+}

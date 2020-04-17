@@ -1,0 +1,130 @@
+{
+    "colors" : ["HEART", "DIAMOND", "CLUB", "SPADE"],
+    "cardsByColor" : ["TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN", "JACK", "QUEEN", "KING", "AS"],
+    "combinaisons" : [
+            {
+                "name" : "HIGHTEST",
+                "message" : "Carte haute",
+                "nbCards" : 1,
+                "type" : "simple",
+                "strength" : 0
+            },
+            {
+                "name" : "PAIR",
+                "message" : "Paire aux VALUE",
+                "nbCards" : 2,
+                "type" : "simple",
+                "strength" : 1
+            },
+            {
+                "name" : "DOUBLE_PAIR",
+                "message" : "Double paire aux VALUE",
+                "nbCards" : 4,
+                "type" : "complexe",
+                "strength" : 2
+            },
+            {
+                "name" : "BRELAN",
+                "message" : "Brelan aux VALUE",
+                "nbCards" : 3,
+                "type" : "simple",
+                "strength" : 3
+            },
+            {
+                "name" : "QUINTE",
+                "message" : "Suite au VALUE",
+                "nbCards" : 5,
+                "type" : "simple",
+                "strength" : 4
+            },
+            {
+                "name" : "COLOR",
+                "message" : "Couleur",
+                "nbCards" : 5,
+                "type" : "simple",
+                "strength" : 5
+            },
+            {
+                "name" : "FULL",
+                "message" : "FULL aux VALUE",
+                "nbCards" : 5,
+                "type" : "complexe",
+                "strength" : 6
+            },
+            {
+                "name" : "CARRE",
+                "message" : "Carre aux VALUE",
+                "nbCards" : 4,
+                "type" : "simple",
+                "strength" : 7
+            },
+            {
+                "name" : "QUINTE_FLUSH",
+                "message" : "Quinte flush au VALUE",
+                "nbCards" : 5,
+                "type" : "simple",
+                "strength" : 8
+            },
+            {
+                "name" : "QUINTE_FLUSH_ROYAL",
+                "message" : "Quinte flush royale",
+                "nbCards" : 5,
+                "type" : "simple",
+                "strength" : 9
+            }
+         ],
+    "stepGame" : {
+        "WAITING_PLAYERS" : {
+            "name" : "WAITING_PLAYERS",
+            "message" : "En attente de connexion des joueurs"
+        },
+        "CONNEXION_PLAYERS" : {
+            "name" : "CONNEXION_PLAYERS",
+            "message" : "Connexion des joueurs"
+        },
+        "CHECK_READY_PLAYERS" : {
+            "name" : "CHECK_READY_PLAYERS",
+            "message" : "Vérification état et distribution des jetons"
+        },
+        "READY_PLAYERS" : {
+            "name" : "READY_PLAYERS",
+            "message" : "Joueurs prêts"
+        },
+        "GIVING_TOKENS" : {
+            "name" : "GIVING_TOKENS",
+            "message" : "Distribution des jetons"
+        },
+        "PREFLOP" : {
+            "name" : "PREFLOP",
+            "message" : "PREFLOP"
+        },
+        "FLOP" : {
+            "name" : "FLOP",
+            "message" : "FLOP"
+        },
+        "TURN" : {
+            "name" : "TURN",
+            "message" : "Le Tournant"
+        },
+        "RIVER" : {
+            "name" : "RIVER",
+            "message" : "La Rivière"
+        },
+        "CHECK_WINNER" : {
+            "name" : "CHECK_WINNER",
+            "message" : "Détermination du gagnant"
+        },
+        "UPDATE_POSITION" : {
+            "name" : "UPDATE_POSITION",
+            "message" : "Mise à jour des positions des joueurs"
+        },
+        "END_ROUND" : {
+            "name" : "END_ROUND",
+            "message" : "Fin de la manche"
+        },
+        "END_GAME" : {
+            "name" : "END_GAME",
+            "message" : "Fin de la partie"
+        }
+    }
+}
