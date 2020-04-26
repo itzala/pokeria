@@ -84,6 +84,26 @@ function PlayerServer(data){
     this.getCards = function(){
         return cards;
     }
+
+    this.getBestCard = function(){
+        let sortedCards = cards.sort((a, b) => {
+            let comparaison = 0;
+
+            if (a.valueIndex > b.valueIndex){
+                comparaison = -1;
+            }
+            else if (a.valueIndex < b.valueIndex){
+                comparaison = 1;
+            }
+
+            return comparaison;
+        });
+        return sortedCards[0];
+    }
+
+    this.resetCards = function(){
+        cards = [];
+    }
 }
 
 module.exports = PlayerServer;

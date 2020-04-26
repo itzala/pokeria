@@ -295,6 +295,9 @@ function Croupier(nbPlayers){
 
     this.startNewGame = function(){
         server.resetCards();
+        for (var i = 0; i < players.length; i++){
+            players[i].resetCards();
+        }
         gameRules.startNewRound();
         this.updatePositions();
         sleep(2000);
@@ -302,6 +305,7 @@ function Croupier(nbPlayers){
     }
 
     this.checkWinner = function(){
+        logger.info(MODULE_NAME,"Determination des vainqueurs....");
         for (var i = 0; i < players.length; i++){
             gameRules.addCardsOtherPlayer(players[i]);
         }
@@ -328,7 +332,7 @@ function Croupier(nbPlayers){
                 this.giveCard(true);
             break;
             case STEPS.CHECK_WINNER.name : 
-                // this.checkWinner();
+                this.checkWinner();
             break;
             case STEPS.END_ROUND.name : 
                 server.endTurn();

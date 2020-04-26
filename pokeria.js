@@ -70,9 +70,10 @@ switch(args['type'].toLowerCase()){
         launchedType = TYPE.CROUPIER;
         break;
     case TYPE.PLAYER :
-        
-        if (args['numero'] == undefined || args['numero'] === true){
+        if (args['numero'] == undefined || args['numero'] === true || args['numero'] == ''){
             console.log("Le numero du joueur n'est pas defini...");
+            console.log(process.argv);
+            console.log(args);
             usage(false, true);
         }
 

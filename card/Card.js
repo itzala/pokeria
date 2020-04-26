@@ -21,11 +21,12 @@ function Card(valueCard, valueCardIndex, colorCard, colorCardIndex){
     }
 
     this.isSameThan = function(other){
-        return false;
+        return other.valueIndex == valueIndex
+        && other.colorIndex == colorIndex;
     }
 
     this.isStrongerThan = function(other){
-        return false;
+        return other.valueIndex < valueIndex;
     }
 
     this.toString = function(){

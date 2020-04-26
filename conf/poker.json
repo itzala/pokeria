@@ -1,78 +1,76 @@
 {
     "colors" : ["HEART", "DIAMOND", "CLUB", "SPADE"],
     "cardsByColor" : ["TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN", "JACK", "QUEEN", "KING", "AS"],
-    "combinaisons" : [
-            {
-                "name" : "HIGHTEST",
-                "message" : "Carte haute",
-                "nbCards" : 1,
-                "type" : "simple",
-                "strength" : 0
-            },
-            {
-                "name" : "PAIR",
-                "message" : "Paire aux VALUE",
-                "nbCards" : 2,
-                "type" : "simple",
-                "strength" : 1
-            },
-            {
-                "name" : "DOUBLE_PAIR",
-                "message" : "Double paire aux VALUE",
+    "combinaisons" : {
+        "CARRE" : {
+            "name" : "CARRE",
+            "message" : "Carré de VALUES",
+            "strength" : 7,
+            "conditions" : {
                 "nbCards" : 4,
-                "type" : "complexe",
-                "strength" : 2
-            },
-            {
-                "name" : "BRELAN",
-                "message" : "Brelan aux VALUE",
-                "nbCards" : 3,
-                "type" : "simple",
-                "strength" : 3
-            },
-            {
-                "name" : "QUINTE",
-                "message" : "Suite au VALUE",
-                "nbCards" : 5,
-                "type" : "simple",
-                "strength" : 4
-            },
-            {
-                "name" : "COLOR",
-                "message" : "Couleur",
-                "nbCards" : 5,
-                "type" : "simple",
-                "strength" : 5
-            },
-            {
-                "name" : "FULL",
-                "message" : "FULL aux VALUE",
-                "nbCards" : 5,
-                "type" : "complexe",
-                "strength" : 6
-            },
-            {
-                "name" : "CARRE",
-                "message" : "Carre aux VALUE",
-                "nbCards" : 4,
-                "type" : "simple",
-                "strength" : 7
-            },
-            {
-                "name" : "QUINTE_FLUSH",
-                "message" : "Quinte flush au VALUE",
-                "nbCards" : 5,
-                "type" : "simple",
-                "strength" : 8
-            },
-            {
-                "name" : "QUINTE_FLUSH_ROYAL",
-                "message" : "Quinte flush royale",
-                "nbCards" : 5,
-                "type" : "simple",
-                "strength" : 9
+                "sameValue" : true,
+                "connnectedCards" : false
             }
-         ],
+        },
+        "FULL" : {
+            "name" : "FULL",
+            "message" : "Full aux VALUES",
+            "strength" : 6,
+            "conditions" : {
+                "subcombinaisons" : ["BRELAN", "PAIRE"],
+                "differentValues" : true
+            }
+        },
+        "COLOR" : {
+            "name" : "COLOR",
+            "message" : "Couleur à VALUES",
+            "strength" : 5,
+            "conditions" : {
+                "nbCards" : 5,
+                "sameValue" : false,
+                "connnectedCards" : false
+            }
+        },
+        "QUINTE" : {
+            "name" : "QUINTE",
+            "message" : "Quinte TYPE au VALUES",
+            "strength" : 4,
+            "conditions" : {
+                "nbCards" : 5,
+                "sameValue" : false,
+                "connnectedCards" : true
+            }
+        },
+        "BRELAN" : {
+            "name" : "BRELAN",
+            "message" : "Brelan aux VALUES",
+            "strength" : 3,
+            "conditions" : {
+                "nbCards" : 3,
+                "sameValue" : true,
+                "connnectedCards" : false
+            }
+        },
+        "DOUBLE_PAIRE" : {
+            "name" : "DOUBLE_PAIRE",
+            "message" : "Double paire aux VALUES",
+            "strength" : 2,
+            "conditions" : {
+                "subcombinaisons" : ["PAIRE", "PAIRE"],
+                "differentValues" : true
+            }
+        },
+        "PAIRE" : {
+            "name" : "PAIRE",
+            "message" : "Paire aux VALUES",
+            "strength" : 1,
+            "conditions" : {
+                "nbCards" : 2,
+                "sameValue" : true,
+                "connnectedCards" : false
+            }
+        }
+    },
     "stepGame" : {
         "WAITING_PLAYERS" : {
             "name" : "WAITING_PLAYERS",
