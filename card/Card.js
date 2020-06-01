@@ -1,3 +1,8 @@
+// Doit être défini à l'identique dans Combinaison
+const SAME_STRENGTH = 0;
+const STRONGER = 1;
+const WEAKER = -1;
+
 function Card(valueCard, valueCardIndex, colorCard, colorCardIndex){
     let value = valueCard;
     let valueIndex = valueCardIndex;
@@ -20,13 +25,36 @@ function Card(valueCard, valueCardIndex, colorCard, colorCardIndex){
         return colorIndex;
     }
 
+
+    this.compareStrength = function(other){
+        if (other != null){
+            if (other.getValueIndex() == valueIndex){
+                // console.log("Same value : value (" + valueIndex + ") => other (" + other.getValueIndex() + ")");
+                return SAME_STRENGTH;
+            }
+            else if (other.getValueIndex() > valueIndex){
+                // console.log("Other value is stronger : value (" + valueIndex + ") => other (" + other.getValueIndex() + ")");
+                return WEAKER;
+            }
+            else {
+                // console.log("Value is stronger : value (" + valueIndex + ") => other (" + other.getValueIndex() + ")");
+            }
+        }
+        return STRONGER;
+    }
+
+
     this.isSameThan = function(other){
-        return other.valueIndex == valueIndex
+        return this.isSameStrength(other)
         && other.colorIndex == colorIndex;
     }
 
+    this.isSameStrength = function(other){
+        return this.compareStrength(other) == SAME_STRENGTH;
+    }
+
     this.isStrongerThan = function(other){
-        return other.valueIndex < valueIndex;
+        return this.compareStrength(other) == STRONGER;
     }
 
     this.toString = function(){

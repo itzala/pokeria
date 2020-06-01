@@ -1,0 +1,3 @@
+#!/bin/sh
+
+node pokeria.js --type=player --numero=$1;

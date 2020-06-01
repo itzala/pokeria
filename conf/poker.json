@@ -2,6 +2,28 @@
     "colors" : ["HEART", "DIAMOND", "CLUB", "SPADE"],
     "cardsByColor" : ["TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN", "JACK", "QUEEN", "KING", "AS"],
     "combinaisons" : {
+        "QUINTE_FLUSH_ROYALE" : {
+            "name" : "QUINTE_FLUSH_ROYALE",
+            "message" : "Quinte flush royale",
+            "strength" : 9,
+            "conditions" : {
+                "nbCards" : 5,
+                "sameValue" : false,
+                "connnectedCards" : true,
+                "isSortable" : true
+            }
+        },
+        "QUINTE_FLUSH" : {
+            "name" : "QUINTE_FLUSH",
+            "message" : "Quinte flush",
+            "strength" : 8,
+            "conditions" : {
+                "nbCards" : 5,
+                "sameValue" : false,
+                "connnectedCards" : true,
+                "isSortable" : true
+            }
+        },
         "CARRE" : {
             "name" : "CARRE",
             "message" : "Carré de VALUES",
@@ -9,7 +31,8 @@
             "conditions" : {
                 "nbCards" : 4,
                 "sameValue" : true,
-                "connnectedCards" : false
+                "connnectedCards" : false,
+                "isSortable" : false
             }
         },
         "FULL" : {
@@ -18,7 +41,8 @@
             "strength" : 6,
             "conditions" : {
                 "subcombinaisons" : ["BRELAN", "PAIRE"],
-                "differentValues" : true
+                "differentValues" : true,
+                "isSortable" : false
             }
         },
         "COLOR" : {
@@ -28,17 +52,19 @@
             "conditions" : {
                 "nbCards" : 5,
                 "sameValue" : false,
-                "connnectedCards" : false
+                "connnectedCards" : false,
+                "isSortable" : true
             }
         },
         "QUINTE" : {
             "name" : "QUINTE",
-            "message" : "Quinte TYPE au VALUES",
+            "message" : "Quinte au VALUES",
             "strength" : 4,
             "conditions" : {
                 "nbCards" : 5,
                 "sameValue" : false,
-                "connnectedCards" : true
+                "connnectedCards" : true,
+                "isSortable" : true
             }
         },
         "BRELAN" : {
@@ -48,7 +74,8 @@
             "conditions" : {
                 "nbCards" : 3,
                 "sameValue" : true,
-                "connnectedCards" : false
+                "connnectedCards" : false,
+                "isSortable" : false
             }
         },
         "DOUBLE_PAIRE" : {
@@ -57,7 +84,8 @@
             "strength" : 2,
             "conditions" : {
                 "subcombinaisons" : ["PAIRE", "PAIRE"],
-                "differentValues" : true
+                "differentValues" : true,
+                "isSortable" : false
             }
         },
         "PAIRE" : {
@@ -67,62 +95,87 @@
             "conditions" : {
                 "nbCards" : 2,
                 "sameValue" : true,
-                "connnectedCards" : false
+                "connnectedCards" : false,
+                "isSortable" : false
+            }
+        },
+        "HIGHTEST" : {
+            "name" : "HITGHTEST",
+            "message" : "Carte Haute",
+            "strength" : 0,
+            "conditions" : {
+                "nbCards" : 1,
+                "sameValue" : false,
+                "connnectedCards" : false,
+                "isSortable" : false
             }
         }
     },
     "stepGame" : {
         "WAITING_PLAYERS" : {
             "name" : "WAITING_PLAYERS",
-            "message" : "En attente de connexion des joueurs"
+            "message" : "En attente de connexion des joueurs",
+            "duration" : 2000
         },
         "CONNEXION_PLAYERS" : {
             "name" : "CONNEXION_PLAYERS",
-            "message" : "Connexion des joueurs"
+            "message" : "Connexion des joueurs",
+            "duration" : 2000
         },
         "CHECK_READY_PLAYERS" : {
             "name" : "CHECK_READY_PLAYERS",
-            "message" : "Vérification état et distribution des jetons"
+            "message" : "Vérification état et distribution des jetons",
+            "duration" : 2000
         },
         "READY_PLAYERS" : {
             "name" : "READY_PLAYERS",
-            "message" : "Joueurs prêts"
+            "message" : "Joueurs prêts",
+            "duration" : 2000
         },
         "GIVING_TOKENS" : {
             "name" : "GIVING_TOKENS",
-            "message" : "Distribution des jetons"
+            "message" : "Distribution des jetons",
+            "duration" : 2000
         },
         "PREFLOP" : {
             "name" : "PREFLOP",
-            "message" : "PREFLOP"
+            "message" : "PREFLOP",
+            "duration" : 2000
         },
         "FLOP" : {
             "name" : "FLOP",
-            "message" : "FLOP"
+            "message" : "FLOP",
+            "duration" : 2000
         },
         "TURN" : {
             "name" : "TURN",
-            "message" : "Le Tournant"
+            "message" : "Le Tournant",
+            "duration" : 2000
         },
         "RIVER" : {
             "name" : "RIVER",
-            "message" : "La Rivière"
+            "message" : "La Rivière",
+            "duration" : 2000
         },
         "CHECK_WINNER" : {
             "name" : "CHECK_WINNER",
-            "message" : "Détermination du gagnant"
+            "message" : "Détermination du gagnant",
+            "duration" : 2000
         },
         "UPDATE_POSITION" : {
             "name" : "UPDATE_POSITION",
-            "message" : "Mise à jour des positions des joueurs"
+            "message" : "Mise à jour des positions des joueurs",
+            "duration" : 2000
         },
         "END_ROUND" : {
             "name" : "END_ROUND",
-            "message" : "Fin de la manche"
+            "message" : "Fin de la manche",
+            "duration" : 2000
         },
         "END_GAME" : {
             "name" : "END_GAME",
-            "message" : "Fin de la partie"
+            "message" : "Fin de la partie",
+            "duration" : 2000
         }
     }
 }

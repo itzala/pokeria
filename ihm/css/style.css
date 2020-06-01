@@ -87,6 +87,7 @@ nav {
     display: flex;
     justify-content: space-evenly;
     min-height: 50px;
+    margin-bottom : 20px;
 }
   
 .playersAreaBottom {
@@ -164,6 +165,10 @@ nav {
     width: 150px;
     height: 250px;
     padding: 5px;
+    display : flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 .player.ready {
@@ -199,6 +204,24 @@ nav {
 
 #step {
     font-weight: bold;
+}
+
+#progressBarStepGame {
+    width: 75%;
+    background-color: grey;
+    border-radius: 5px;
+}
+
+#progressBar{
+    width: 0%;
+    height: 30px;
+    background-color: green;
+    border-radius: 5px;    
+}
+
+@keyframes progressStepMove{
+    0% {width: 100%;}
+    100% {width: 0%;}
 }
 
 .nbConnectedPlayers, #nbMaxPlayers, #nbReadyPlayers {
@@ -315,7 +338,6 @@ nav {
     margin-right: 5px;
 }
 
-
 #legende {
     border: 1px solid black;
     border-radius: 5px;
@@ -332,6 +354,13 @@ nav {
     align-items: center;
     margin-top : 5px;
     width: 50%;
+}
+
+.detailsPlayer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .position {
@@ -361,6 +390,10 @@ nav {
 
 .position-player {
     background-color: black;
+}
+
+.handContainer {
+    
 }
 
 /* Adaptations de la librairie pour les cartes */

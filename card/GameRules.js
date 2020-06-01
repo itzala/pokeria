@@ -12,18 +12,6 @@ function GameRules(){
     let deck = null;
     const STEPS = configuration.stepGame;
     const COMBINAISONS = configuration.combinaisons;
-    // const COMBINAISONS = configuration.combinaisons;.sort((a, b) => {
-    //     let comparaison = 0;
-
-    //     if (a.strength > b.strength){
-    //         comparaison = -1;
-    //     }
-    //     else if (a.strength < b.strength){
-    //         comparaison = 1;
-    //     }
-
-    //     return comparaison;
-    // });
     let currentStepGame = null;
     
     let currentPlayerCards = null;
@@ -88,9 +76,7 @@ function GameRules(){
         currentStepGame = STEPS.READY_PLAYERS;
         logger.info(MODULE_NAME, "Changement de l'etat : " + currentStepGame.name);
         logger.info(MODULE_NAME, "Reset des cartes des joueurs");
-        console.log("Others players before reset...." + otherPlayersCards);
         otherPlayersCards = [];
-        console.log("Others players after reset...." + otherPlayersCards);
         logger.info(MODULE_NAME, "Reinitialisation du deck");
         deck.init();
         deck.shuffle();
@@ -131,7 +117,8 @@ function GameRules(){
                 'name' : playerToProcess.getName(),
                 'cards' : playerToProcess.getCards(),
                 'histogram' : histogram,
-                'combinaisons' : []
+                'combinaisons' : [],
+                'kickers' : []
             });
         }
         else {
@@ -222,11 +209,36 @@ function GameRules(){
         return null;
     }
 
+    this.getCardsQuinteFlush = function(player, indexCards){
+        let cards = [];
+        for (var i = 0; i < indexCards.length; i++){
+            cards.push(player.cards.get(indexCards[i]));
+        }
+        return cards;
+    }
+
+    this.getCardsQuinte = function(player, indexValueCards){
+        let cards = [];
+        for (var i = 0; i < indexValueCards.length; i++){
+            cards.push(this.getCardsByValue(player, indexValueCards[i])[0]);
+        }
+        return cards;
+    }
+
+    this.getKickers = function(cardsPlayer, combinaison){
+        let kickers = [];
+        let nbKickers = combinaison.getNbNeededKickers();
+        if (nbKickers > 0){
+            
+        }
+
+        return kickers;
+    }
+
     this.calculateCombinaisons = function(player){
         logger.info(MODULE_NAME, "Calcul des combinaisons pour le joueur " + player.name);
-        console.log(player.histogram);
-        let bestCombinaison = null;
-
+        // console.log(player.histogram);
+        
         let paires = [];
         let brelans = [];
         let carre = NOT_FOUND;
@@ -234,9 +246,11 @@ function GameRules(){
         let quinte = [];
         let higthestCard = NOT_FOUND;
 
+        let processedCombinaisons = [];
+
         // Calcul de la couleur
         for (var i = INDEXLINECPTVALUES - 1; i >= 0; i-- ){
-            if (player.histogram[i][INDEXCOLUMNCPTCOLORS] == 5){
+            if (player.histogram[i][INDEXCOLUMNCPTCOLORS] == COMBINAISONS.COLOR.conditions.nbCards){
                 // logger.debug(MODULE_NAME, "Couleur trouvee a la position " + i);
                 color = i;
                 break;
@@ -247,15 +261,15 @@ function GameRules(){
         // Calcul des combinaisons basées sur la valeur
         for (var i = INDEXCOLUMNCPTCOLORS - 1; i > 0; i-- ){            
             switch(player.histogram[INDEXLINECPTVALUES][i]){
-                case 2 : 
+                case COMBINAISONS.PAIRE.conditions.nbCards : 
                     // logger.debug(MODULE_NAME, "Paire trouvee a la position " + i);
                     paires.push(i);
                     break;
-                case 3:
+                case COMBINAISONS.BRELAN.conditions.nbCards:
                     // logger.debug(MODULE_NAME, "Brelan trouve a la position " + i);
                     brelans.push(i);
                     break;
-                case 4 :
+                case COMBINAISONS.CARRE.conditions.nbCards :
                     // logger.debug(MODULE_NAME, "Carre trouve a la position " + i);
                     carre = i;
                     break;
@@ -269,68 +283,139 @@ function GameRules(){
                 // logger.debug(MODULE_NAME, "Ajout de la carte de valeur " + i + " dans la suite");
                 quinte.push(i);
             }
-            else if (quinte.length < 5){
+            else if (quinte.length < COMBINAISONS.QUINTE.conditions.nbCards){
                 // logger.debug(MODULE_NAME, "Reinitialisation de la quinte...");
                 quinte = [];
             }
         }
 
-        if (quinte.length >= 5){
+        if (quinte.length >= COMBINAISONS.QUINTE.conditions.nbCards){
             let royale = false;
             let flush = false;
             let quinte_flush = [];
             console.log("Quinte trouvee : " + quinte);
+            let quinteCards = null;
             if (color != NOT_FOUND){
                 console.log("==> Determination si quinte flush....");
                 for (var i = 0; i < quinte.length; i++){
                     console.log("player.histogram[" + color + "]["+quinte[i]+"] : " + player.histogram[color][quinte[i]])
                     if (player.histogram[color][quinte[i]] != NOT_FOUND){
-                        quinte_flush.push(quinte[i]);
+                        quinte_flush.push(player.histogram[color][quinte[i]]);
                     }
                 }
-                flush = (quinte_flush.length == 5);
+                flush = (quinte_flush.length >= COMBINAISONS.QUINTE.conditions.nbCards);
                 if (flush){
                     console.log("==> Quinte flush trouvee");
                     console.log("===> Determination si quinte flush royale....");
                     royale = (quinte_flush[0] == 13) && (quinte_flush[4] == 9);
                     if(royale){
                         console.log("===> Quinte flush royale trouvee");
+                        processedCombinaisons.push(new Combinaison(COMBINAISONS.QUINTE_FLUSH_ROYALE, this.getCardsQuinteFlush(player, quinte_flush)));
+                    }
+                    else {
+                        processedCombinaisons.push(new Combinaison(COMBINAISONS.QUINTE_FLUSH, this.getCardsQuinteFlush(player, quinte_flush)));
                     }
                 }
             }
+            else {
+                processedCombinaisons.push(new Combinaison(COMBINAISONS.QUINTE, this.getCardsQuinte(player, quinte)));
+            }
         }
         if (carre != NOT_FOUND){
-            console.log("Carre : " + this.getCardsByValue(player, carre));
+            let carreCards = this.getCardsByValue(player, carre);
+            // console.log("Carre : " + carreCards);
+            processedCombinaisons.push(new Combinaison(COMBINAISONS.CARRE, carreCards));
         }
         if (brelans.length > 0 && paires.length > 0){
-            console.log("Full : { Brelan : " + this.getCardsByValue(player, brelans[0]) + " / Paire : " +  this.getCardsByValue(player, paires[0]) + " }");
+            let brelanCards = this.getCardsByValue(player, brelans[0]);
+            let paireCards = this.getCardsByValue(player, paires[0]);
+            console.log("Full : { Brelan : " + brelanCards + " / Paire : " +  paireCards + " }");
+            processedCombinaisons.push(new Combinaison(COMBINAISONS.FULL, null, 
+                new Combinaison(COMBINAISONS.BRELAN, brelanCards),
+                new Combinaison(COMBINAISONS.PAIRE,  paireCards)
+            ));
         }
         if (color != NOT_FOUND){
-            console.log("Couleur : " + this.getCardsByColor(player, color));
+            let colorCards = this.getCardsByColor(player, color);
+            console.log("Couleur : " + colorCards);
+            processedCombinaisons.push(new Combinaison(COMBINAISONS.COLOR, colorCards));
         }
         if (brelans.length > 0){
-            console.log("Brelans : " + this.getCardsByValue(player, brelans[0]));
+            let brelanCards = this.getCardsByValue(player, brelans[0]);
+            console.log("Brelans : " + brelanCards);
+            processedCombinaisons.push(new Combinaison(COMBINAISONS.BRELAN, brelanCards));
         }
         if (paires.length >= 2){
-            console.log("Double paires : " + this.getCardsByValue(player, paires[0]) + ", " + this.getCardsByValue(player, paires[1]));
+            let paire1Cards = this.getCardsByValue(player, paires[0]);
+            let paire2Cards = this.getCardsByValue(player, paires[1]);
+            console.log("Double paires : " + paire1Cards + ", " + paire2Cards);
+            processedCombinaisons.push(new Combinaison(COMBINAISONS.DOUBLE_PAIRE, null, 
+                new Combinaison(COMBINAISONS.PAIRE, paire1Cards),
+                new Combinaison(COMBINAISONS.PAIRE, paire2Cards)));
         } else if (paires.length == 1 ){
-            console.log("Paires : " + this.getCardsByValue(player, paires[0]));
+            let paireCards = this.getCardsByValue(player, paires[0]);
+            console.log("Paires : " + paireCards);
+            processedCombinaisons.push(new Combinaison(COMBINAISONS.PAIRE, paireCards));
         }
-        console.log("Carte la plus haute : " + this.getCardsByValue(player, higthestCard)[0]);
+        higthestCard = this.getCardsByValue(player, higthestCard)[0];
+        console.log("Carte la plus haute : " + higthestCard);
+        processedCombinaisons.push(new Combinaison(COMBINAISONS.HIGHTEST, higthestCard));
         
+        if (processedCombinaisons.length > 1){
+            processedCombinaisons.sort((a,b) => {
+                let comparaison = 0;
+            
+                if (a.isStrongerThan(b)){
+                    comparaison = -1;
+                }
+                else if (b.isStrongerThan(a)){
+                    comparaison = 1;
+                }
+
+                return comparaison;
+            });
+        }
+        player.combinaisons.BEST = processedCombinaisons[0];
+        player.kickers = this.getKickers(player.cards, player.combinaisons.BEST);
+        player.combinaisons.HIGHTEST = new Combinaison(COMBINAISONS.HIGHTEST, higthestCard);
+
         return player;
     }
 
-
     this.getWinners = function(){
         logger.info(MODULE_NAME, "Determination des vainqeurs");
+        let players = [];
         let winners = [];
-        let bestCombinaison = null;
-        let bestCombinaisonPlayer = null;
-
+        
         for (var indexPlayer in otherPlayersCards){
-            bestCombinaisonPlayer = this.calculateCombinaisons(otherPlayersCards[indexPlayer]);
+            this.calculateCombinaisons(otherPlayersCards[indexPlayer]);
+            players.push(otherPlayersCards[indexPlayer]);
+            logger.info(MODULE_NAME, "Meilleure combinaison : " + otherPlayersCards[indexPlayer].combinaisons.BEST);
         }
+
+        players.sort((a,b) => {
+            let comparaison = 0;
+        
+            if (a.combinaisons.BEST.isStrongerThan(b.combinaisons.BEST, true)){
+                comparaison = -1;
+            }
+            else if (b.combinaisons.BEST.isStrongerThan(a.combinaisons.BEST, true)){
+                comparaison = 1;
+            }
+
+            return comparaison;
+        });
+
+        winners.push(players[0]);
+        console.log(players[0].name + " a la meilleure combinaison " + players[0].combinaisons.BEST);
+        
+        for (var i = 1; i < players.length; i++){
+            if (players[i].combinaisons.BEST.isSameStrength(players[0].combinaisons.BEST, true)){
+                winners.push(players[i]);
+                console.log(players[i].name + " a la meme combinaison....");
+            }
+        }
+        console.log(winners);
 
         return winners;
     }

@@ -58,6 +58,26 @@ function Croupier(nbPlayers){
         this.initAvailableSeats();
     }
 
+
+    this.connexionSpectator = function(){
+        if (players.length == 0){
+            server.initializeSpectator(this.getCurrentStepGame());
+        }
+        else {
+            logger.info(MODULE_NAME, "Resynchronisation de l'IHM !");
+            let data = {
+                'nbMaxPlayers' : nbMaxPlayers,
+                'currentStep' : this.getCurrentStepGame(),
+                'players' : [],
+            };
+            for (var i = 0; i < players.length; i++){
+                data.players.push(players[i].getInfos(true));
+            }
+            server.synchronizeSpectator(data);
+            this.updateRank();
+        }
+    }
+
     this.getCurrentStepGame = function(){
         return gameRules.getCurrentStepGame();
     }
@@ -143,7 +163,7 @@ function Croupier(nbPlayers){
             result.status = "success";
             result.message = "Bienvenue a la table";
             this.changeAvailableSeat(dataPlayer["seat"] - 1, false);
-            result.details = newPlayer.getInfos();
+            result.details = newPlayer.getInfos(true);
             this.updateRank();
         }
 
@@ -209,6 +229,7 @@ function Croupier(nbPlayers){
         let player = this.getPlayer(playerID);
         logger.info(MODULE_NAME, "Distribution des jetons");
         player.setTokens(countTokensStart + (player.getPosition() - 1));
+        player.setState("READY");
         server.giveTokens(countTokensStart + (player.getPosition() - 1), player.getSocketID());
         nbReadyPlayers++;
         server.playerReady(playerID);
@@ -241,23 +262,23 @@ function Croupier(nbPlayers){
         let nbTurns = 2 * players.length; // on donne 2 cartes à chaque joueur
         for (let i = 0; i < nbTurns; i++){
             this.giveCard(false, players[(i +1) % players.length]); // on commence par le joueur "petite blinde"
-            sleep(1000);    // on ajoute du délai pour voir les animations sur l'IHM
+            // sleep(1000);    // on ajoute du délai pour voir les animations sur l'IHM
         }
         logger.info(MODULE_NAME, "Fin de  la distribution des cartes de depart");
         // FLOP
-        sleep(5000);
+        sleep(currentStep.duration);
         this.nextTurn();
         // TURN
-        sleep(5000);
+        sleep(currentStep.duration);
         this.nextTurn();
         // RIVER
-        sleep(5000);
+        sleep(currentStep.duration);
         this.nextTurn();
         // Détermination du gagnant
-        sleep(5000);
+        sleep(currentStep.duration);
         this.nextTurn();
         // Fin de partie
-        sleep(3000);
+        sleep(currentStep.duration);
         this.nextTurn();
     }
 

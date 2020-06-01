@@ -44,6 +44,21 @@ $(document).ready(function(){
     function updateNbConnectedPlayers(){
         $('.nbConnectedPlayers').text(players.length);
     }
+
+    function addCard(player, card){
+        let newCard = getCard(card.valueIndex, card.colorIndex);
+        let liCard = $('<li></li>');
+        liCard.append(newCard);
+        $('#croupier-deck li').last().remove();
+        if (player != null){
+            updateHistoricAera(player.name + " vient de recevoir la carte {" + card.value + " of " + card.color + "}");
+            $('#hand-seat-' + player.seat).append(liCard);
+        }
+        else {
+            $('#tableCardsList').append(liCard);
+            updateHistoricAera("La carte {" + card.value + " of " + card.color + "} est placée sur la table");
+        }
+    }
     
     function addPlayerScoreboard(infos){
         var scoreboard = $('#classement');
@@ -88,18 +103,41 @@ $(document).ready(function(){
         }
     }
 
-    function addNewPlayer(infos){
+    function addNewPlayer(infos, isSynchronize = false){
         var newPlayer = $('<div></div>');
         newPlayer.prop('id', 'seat-' + infos.seat) ;
         newPlayer.prop('class', 'player');
-        newPlayer.append($('<h4></h4>').text('Siège ' + infos.seat + ' - ' + infos.name));
+        newPlayer.append($('<h4></h4>').text('- Siège ' + infos.seat + ' - '));
+        newPlayer.append($('<h5></h5>').text(infos.name));
         var handPlayer = $('<div></<div>');
         handPlayer.prop('class', 'playingCards faceImages');
         var listCards = $('<ul></ul>');
         listCards.prop('id', "hand-seat-" + infos.seat);
         listCards.prop('class', "hand");
         handPlayer.append(listCards);
-        newPlayer.append(handPlayer);
+        var handContainer = $('<div></div>');
+        handContainer.prop('class', 'handContainer');
+        handContainer.append(handPlayer);
+        newPlayer.append(handContainer);
+        if (isSynchronize){
+            infos.cards = JSON.parse(infos.cards);
+        }
+        
+        console.log(infos);
+        console.log(infos.cards);
+        console.log(infos.cards.length);
+        if (infos.cards.length > 0){
+            for(var card in infos.cards){
+                console.log("Ajout des cartes ?");
+                if (infos.cards.length <= 2){
+                    addCard(infos, card);
+                }
+                else {
+                    addCard(null, card);
+                }
+                
+            }
+        }
         var detailsPlayer = $('<div></div>');
         detailsPlayer.prop('class', 'detailsPlayer');
         detailsPlayer.append($('<p></p>').html('Jetons : <span class="tokensPlayer" id="tokens-seat-' + infos.seat + '">' + infos.tokens + '</span>'));
@@ -109,9 +147,9 @@ $(document).ready(function(){
 
         updatePositionPlayer(positionPlayer, infos.position);
         
-        detailsPlayer.append($('<p></p>').append(positionPlayer));
+        detailsPlayer.append(positionPlayer);
         newPlayer.append(detailsPlayer);
-    
+
         // TODO : Modifier ici pour adapater selon le nombre de joueurs maximal
         switch(infos.seat){
             case 1 :
@@ -135,6 +173,8 @@ $(document).ready(function(){
                 $('.playersAreaRight').append(newPlayer);
                 break;
         }
+
+        setStatePlayer(infos.seat, infos.state);
 
         players.push(infos);
         // addPlayerScoreboard(infos);
@@ -166,17 +206,49 @@ $(document).ready(function(){
     }
     
     function updateHistoricAera(actionMessage){
-    
-        const dateOptions = {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hour12: false
-            };
-        const now = new Date();
-        const dateAction = new Intl.DateTimeFormat('fr-FR', dateOptions).format(now);
-        var newLiMessage = $('<li></li>');
-        var newMessage = newLiMessage.append($('<p></p>').html("<span class='heureAction'> " + dateAction + "</span> " + actionMessage));
-        $('#historiqueListe').append(newMessage);
+        if (verbose){
+            const dateOptions = {
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hour12: false
+                };
+            const now = new Date();
+            const dateAction = new Intl.DateTimeFormat('fr-FR', dateOptions).format(now);
+            var newLiMessage = $('<li></li>');
+            var newMessage = newLiMessage.append($('<p></p>').html("<span class='heureAction'> " + dateAction + "</span> " + actionMessage));
+            $('#historiqueListe').append(newMessage);
+        }
+    }
+
+    function manageButtons(){
+        switch(currentStep.name){
+            case "WAITING_PLAYERS" :
+                $('#getReadyButton').hide();
+                $('#startGameButton').hide();
+                $('#startNewGameButton').hide();
+                $('#reinitializeGameButton').hide();
+                break;
+            case "CONNEXION_PLAYERS" :
+                $('#getReadyButton').show();
+                $('#startGameButton').hide();
+                $('#startNewGameButton').hide();
+                $('#reinitializeGameButton').show();
+                break;
+            case "READY_PLAYERS" :
+                $('#getReadyButton').hide();
+                $('#startGameButton').show();
+                $('#startNewGameButton').hide();
+                $('#reinitializeGameButton').show();
+                break;
+            case "END_ROUND" :
+                $('#getReadyButton').hide();
+                $('#startGameButton').hide();
+                $('#startNewGameButton').show();
+                $('#reinitializeGameButton').show();
+                break;
+            default:
+                break;
+        }
     }
     
     function getIndexPlayer(playerID, playerName = ""){
@@ -212,12 +284,31 @@ $(document).ready(function(){
             $('#croupier-deck').append($('<li></li>').append(getBackCard()));
         }
     }
+
+    function setStatePlayer(seat, state = "ALIVE"){
+        // $('#seat-' + seat).addClass('ready');
+        switch (state) {
+            case "READY" :
+                $('#seat-' + seat).addClass('ready');
+            break;
+            case "WINNER" : 
+                $('#seat-' + seat).addClass('winner');
+            break;
+            case "FOLDED" :
+                $('#seat-' + seat).addClass('folded');
+            break;
+            case "OUT" :
+                $('#seat-' + seat).addClass('out');
+            break;
+        }
+    }
     
     let socket = io("/ihm");
-    socket.emit('initialize-ihm', {});
+    socket.emit('connexion-ihm', {});
     let players = [];
     let nbReadyPlayers = 0;
     let currentStep = null;
+    let verbose = true;
     
     socket.on('configuration-ihm', function(data){
         $('#nbMaxPlayers').text(data.infos.nbMaxPlayers);
@@ -226,6 +317,24 @@ $(document).ready(function(){
         buildDeck(data.infos.nbMaxPlayers);
     });
     
+    socket.on('synchronize-ihm', function(data){
+        let infos = data.infos;
+        updateHistoricAera("Resynchronisation de l'IHM.. Historique précédent perdu....");
+        currentStep = infos.currentStep;
+        verbose = false;
+        updateStepGame();
+        
+        let nbCardsDeck = data.infos.nbMaxPlayers;
+        buildDeck(nbCardsDeck);
+        manageButtons();
+
+        for (let i = 0; i < infos.players.length; i++) {
+            addNewPlayer(infos.players[i], true);
+        }
+        
+        verbose = true;
+    });
+
     socket.on('connexion-player', function(data){
         if (players.length == 0){
             $('#getReadyButton').prop('disabled', false);   
@@ -241,6 +350,8 @@ $(document).ready(function(){
     socket.on('update-step', function(data){
         currentStep = data.infos.currentStep;
         updateStepGame();
+        manageButtons();
+        // $("#progressBar").css("animation", "progressStepMove 20s");
     });
 
     socket.on('give-tokens', function(data){
@@ -255,27 +366,21 @@ $(document).ready(function(){
     });
 
     socket.on('give-card', function(data){
-        let newCard = getCard(data.infos.card.valueIndex, data.infos.card.colorIndex);
-        let liCard = $('<li></li>');
-        liCard.append(newCard);
-        $('#croupier-deck li').last().remove();
+        
+        let player = null;
+
         if (data.infos.playerID != ''){
-            var updatedPlayer = getPlayer(data.infos.playerID);
-            updateHistoricAera("Le joueur " + updatedPlayer.name + " vient de recevoir la carte {" + data.infos.card.value + " of " + data.infos.card.color + "}");
-            $('#hand-seat-' + updatedPlayer.seat).append(liCard);
+            player = getPlayer(data.infos.playerID);
         }
-        else {
-            $('#tableCardsList').append(liCard);
-            updateHistoricAera("La carte {" + data.infos.card.value + " of " + data.infos.card.color + "} est placée sur la table");
-        }
+        addCard(player, data.infos.card);
     });
 
     socket.on('ready-player', function(data){        
         var readyPlayer = getPlayer(data.infos.socketID);
         if (readyPlayer != null){
-            updateHistoricAera("Le joueur " + readyPlayer.name + " est prêt...");
+            updateHistoricAera(readyPlayer.name + " est prêt...");
             nbReadyPlayers++;
-            $('#seat-' + readyPlayer.seat).addClass('ready');
+            setStatePlayer(readyPlayer.seat, "READY");
             $('#nbReadyPlayers').text(nbReadyPlayers);
         }
     });
@@ -292,12 +397,14 @@ $(document).ready(function(){
 
     socket.on('update-winners', function(data){
         updateHistoricAera("Les vainqueurs ont été déterminés....");
-        console.log(data);
+        console.log('winners');
+        console.log(data.infos.winners);
     });
 
     socket.on('end-turn', function(){
         updateHistoricAera("Fin de la manche");
-        $('#startNewGameButton').show();
+        manageButtons();
+        // $('#startNewGameButton').show();
     });
 
     socket.on('update-position', function(data){
@@ -328,9 +435,9 @@ $(document).ready(function(){
         if (players.length > 0) {
             updateHistoricAera("Vérification de la dispo des joueurs...");
             socket.emit('get-ready-player', {});
-            $('#getReadyButton').hide();
-            $('#startGameButton').prop('disabled', false);
-            $('#startGameButton').show();
+            // $('#getReadyButton').hide();
+            // $('#startGameButton').prop('disabled', false);
+            // $('#startGameButton').show();
         }
     });
 
@@ -338,9 +445,9 @@ $(document).ready(function(){
         event.preventDefault();
         updateHistoricAera("Tous les joueurs sont prêts... La partie peut être lancée");
         socket.emit('start-game', {});
-        $('#startGameButton').prop('disabled', true);
-        $('#startGameButton').hide();
-        $('#nextTurnButton').show();
+        // $('#startGameButton').prop('disabled', true);
+        // $('#startGameButton').hide();
+        // $('#nextTurnButton').show();
     });
 
     $('#nextTurnButton').click(function(event){
@@ -351,7 +458,7 @@ $(document).ready(function(){
     $('#startNewGameButton').click(function(event){
         event.preventDefault();
         updateHistoricAera("Lancement d'une nouvelle partie");
-        $('#startNewGameButton').hide();
+        // $('#startNewGameButton').hide();
         $('#tableCardsList li').remove();
         // on passe false en deuxième argument pour ne pas rajouter le joker lors de la "reconstruction" du deck pour la nouvelle partie
         buildDeck($('#nbMaxPlayers').text(), false);

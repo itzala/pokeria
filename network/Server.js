@@ -33,7 +33,6 @@ function Server(conf, croupierInstance){
             socket.on('presentation-infos', function(data){
                 logger.info(MODULE_NAME, "Envoi d'une demande de presentation...");
                 data.infos['socketID'] = socket.id;
-                console.log(data);
                 let result = croupier.addPlayer(data.infos);
                 const eventName = "connexion-" + result.status;
                 logger.info(MODULE_NAME, 'Client '+ socket.id +' accepte ? ' + result.status + " => Event a emettre : " + eventName);
@@ -75,11 +74,8 @@ function Server(conf, croupierInstance){
             res.sendFile(ihmDir +'/index.html');
          });
         ihmIO.on('connection', function(socket){
-            socket.on('initialize-ihm', function(){
-                socket.emit('configuration-ihm', {infos : {
-                    "nbMaxPlayers" : confServer.nbMaxPlayer,
-                    'currentStep' : croupier.getCurrentStepGame()               
-                }});
+            socket.on('connexion-ihm', function(){
+                croupier.connexionSpectator();
             });
 
 
@@ -116,6 +112,17 @@ function Server(conf, croupierInstance){
 
         this.initApi();
         this.initIHM();
+    }
+
+    this.initializeSpectator = function(currentStepGame){
+        ihmIO.emit('configuration-ihm', {infos : {
+            "nbMaxPlayers" : confServer.nbMaxPlayer,
+            'currentStep' : currentStepGame               
+        }});
+    }
+
+    this.synchronizeSpectator = function(data){
+        ihmIO.emit('synchronize-ihm', {infos : data});
     }
 
     this.updateStepGame = function(nextStepGame, isForclient = true, isForIHM = true){

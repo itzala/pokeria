@@ -54,7 +54,21 @@
                         <p> Joueurs au maximum : <span id="nbMaxPlayers">0</span></p>
                         <p> Joueurs connectés : <span class="nbConnectedPlayers">0</span></p>
                         <p> Joueurs prêts : <span id="nbReadyPlayers">0</span> / <span class="nbConnectedPlayers">0</span></p>
+                        <p> Manche n°<span id="number_round"></span></p>
                         <p> Etape du jeu : <span id="step"> IHM Connectée</span></p>
+                        <div id="progressBarStepGame">
+                            <div id="progressBar"></div>
+                        </div>
+                    </div>
+                    <div id="actions">
+                        <h3>Actions</h3>
+                            <ul id="actionsButton">
+                                <!-- <li><button type='button' class="btn primary" id="initIHMButton">Initialiser IHM</button></li> -->
+                                <li><button type='button' class="btn primary" id="getReadyButton" hidden>Prêts ? </button></li>
+                                <li><button type='button' class="btn primary" id="startGameButton" hidden>Lancer la partie</button></li>
+                                <li><button type='button' class="btn primary" id="startNewGameButton" hidden>Lancer une nouvelle partie</button></li>
+                                <li><button type='button' class="btn warning" id="reinitializeGameButton" hidden>Réinitialiser</button></li>
+                            </ul>
                     </div>
                     <div id="legende">
                         <div class="legende-item">
@@ -85,16 +99,6 @@
                             <li>Carte haute</li>
                             <li>Carte haute</li>
                         </ul> -->
-                    </div>
-                    <div id="actions">
-                        <h3>Actions</h3>
-                            <ul id="actionsButton">
-                                <!-- <li><button type='button' class="btn primary" id="initIHMButton">Initialiser IHM</button></li> -->
-                                <li><button type='button' class="btn primary" id="getReadyButton">Prêts ? </button></li>
-                                <li><button type='button' class="btn primary" id="startGameButton" hidden>Lancer la partie</button></li>
-                                <li><button type='button' class="btn primary" id="startNewGameButton" hidden>Lancer une nouvelle partie</button></li>
-                                <li><button type='button' class="btn warning" id="reinitializeGameButton">Réinitialiser</button></li>
-                            </ul>
                     </div>
                     <div id="scoreboardSection">
                         <h3>Scoreboard</h3>

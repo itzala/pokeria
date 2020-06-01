@@ -11,7 +11,6 @@ function PlayerServer(data){
 
     let logger = null;
         
-
     this.setLogger = function(loggerInstance){
         logger = loggerInstance;
     }
@@ -60,16 +59,30 @@ function PlayerServer(data){
         tokens += deltaTokens;
     }
 
-    this.getInfos = function(){
+    this.setState = function(newState){
+        state = newState;
+    }
+
+    this.getInfos = function(isForSynchronizeIHM = false){
+        let cardsJSon = cards;
+        if (isForSynchronizeIHM){
+            for (const card in cards) {
+                cardsJSon = [];
+                cardsJSon.push(card.getInformationsJSON());
+                cardsJSon = JSON.stringify(cardsJSon);
+            }
+        }
+        
         return {
             "name" : name,
             "tokens" : tokens,
             "position" : position,
             "seat" : seat,
+            "state" : state,
             "rank" : rank,
             "state" : state,
             "socketID" : socketID,
-            "cards" : cards,
+            "cards" : cards
         };
     }
 
